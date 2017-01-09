@@ -23,6 +23,10 @@ public class User {
 	
 	private String email;
 
+	public void setId(long id) {
+		this.id = id;
+	}
+	
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
@@ -39,9 +43,13 @@ public class User {
 		this.email = email;
 	}
 
+	public String getPassword() {
+		return password;
+	}
+
 	@Override
 	public String toString() {
-		return "User [userId=" + userId + ", name=" + name + ", email=" + email + "]";
+		return "User [id=" + id + "userId=" + userId + ", name=" + name + ", email=" + email + "]";
 	}
 
 }
