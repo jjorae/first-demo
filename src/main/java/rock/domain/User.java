@@ -43,8 +43,20 @@ public class User {
 		this.email = email;
 	}
 
-	public String getPassword() {
-		return password;
+	public boolean matchUserId(User user) {
+		if(user == null) {
+			throw new IllegalStateException("User is null.");
+		}
+		
+		return this.userId.equals(user.userId);
+	}
+	
+	public boolean matchPassword(User user) {
+		if(user == null) {
+			throw new IllegalStateException("User is null.");
+		}
+		
+		return this.password.equals(user.password);
 	}
 
 	@Override
