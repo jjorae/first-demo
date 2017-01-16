@@ -24,6 +24,22 @@ public class Answer {
 	@JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_question"))
 	private Question question;
 	
+	public Answer() {}
+	
+	public Answer(Question question, User writer, String contents) {
+		super();
+		this.question = question;
+		this.writer = writer;
+		this.contents = contents;
+	}
+	
+	public Answer(long id, User writer, String contents) {
+		super();
+		this.id = id;
+		this.writer = writer;
+		this.contents = contents;
+	}
+
 	public void setWriter(User writer) {
 		this.writer = writer;
 	}
@@ -36,8 +52,11 @@ public class Answer {
 		this.question = question;
 	}
 	
-	public boolean isWriter(User writer) {
-		return writer.matchUserId(writer);
+	public void printUserId() {
+		System.out.println(this.writer.toString());
+	}
+	public boolean isWriter(User user) {
+		return this.writer.matchUserId(user);
 	}
 
 	@Override

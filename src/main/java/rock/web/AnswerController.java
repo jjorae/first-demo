@@ -4,62 +4,39 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-import rock.domain.Answer;
-import rock.domain.AnswerRepository;
-import rock.domain.Question;
-import rock.domain.QuestionRepository;
-import rock.domain.User;
+import rock.service.AnswerService;
+import rock.util.SessionUtil;
 
 @Controller
+@RequestMapping("/questions/{questionId}/answers")
 public class AnswerController {
 	
 	@Autowired
-	private QuestionRepository questionRepository;
+	private AnswerService answerService;
 	
-	@Autowired
-	private AnswerRepository answerRepository;
-	
-	@PostMapping("/questions/{questionId}/answers")
+	@PostMapping
 	public String add(@PathVariable long questionId, String contents, HttpSession session) {
-		
-		User user = (User)session.getAttribute("s_user");
-		
-		if(user == null) {
+		if(!SessionUtil.isLogined(session)) {
 			throw new IllegalStateException("Only login user can write answer.");
 		}
 		
-		Question question = questionRepository.findOne(questionId);
-		
-		Answer answer = new Answer();
-		
-		answer.setQuestion(question);
-		answer.setWriter(user);
-		answer.setContents(contents);
-		
-		answerRepository.save(answer);
+		answerService.addAnswer(questionId, contents, session);
 		
 		return "redirect:/questions/" + questionId;
 	}
 	
-	@GetMapping("/questions/{questionId}/answers/{id}/del")
+	@DeleteMapping("/{id}")
 	public String del(@PathVariable long questionId, @PathVariable long id, HttpSession session) {
-		User user = (User)session.getAttribute("s_user");
-		
-		if(user == null) {
+		if(!SessionUtil.isLogined(session)) {
 			throw new IllegalStateException("Only login user can del answer.");
 		}
 		
-		Answer answer = answerRepository.findOne(id);
-		
-		if(!answer.isWriter(user)) {
-			throw new IllegalStateException("Only writer can del answer.");
-		}
-		
-		answerRepository.delete(id);
+		answerService.delete(id, session);
 		
 		return "redirect:/questions/" + questionId;
 	}

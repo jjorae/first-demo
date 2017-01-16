@@ -5,17 +5,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import rock.domain.QuestionRepository;
+import rock.service.QuestionService;
 
 @Controller
 public class HomeController {
 
 	@Autowired
-	private QuestionRepository questionRepository;
+	private QuestionService questionService;
 	
 	@GetMapping("")
 	public String list(Model model) {
-		model.addAttribute("questions", questionRepository.findAll());
+		model.addAttribute("questions", questionService.findQuestions());
 		
 		return "index";
 	}
