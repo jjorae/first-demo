@@ -1,1 +1,0 @@
-alter table question add column show_count integer default 0 not null;
